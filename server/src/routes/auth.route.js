@@ -1,5 +1,11 @@
 const router = require("express").Router();
+const { signUp, login, getMe } = require("../controllers/auth.controller");
+const requireAuth = require("../middleware/auth.middleware");
 
-const { signup } = require("../controllers/auth.controller");
+router.post("/signup", signUp);
+router.post("/login", login);
 
-router.post("/signup", signup);
+// Protected route example
+router.get("/me", requireAuth, getMe);
+
+module.exports = router;
