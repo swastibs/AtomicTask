@@ -1,12 +1,6 @@
 const router = require("express").Router();
-const { successResponse } = require("../utils/ApiResponse");
+const healthRouter = require("./health.route");
 
-// Health check
-router.get("/health", (req, res) => {
-  successResponse(res, {
-    message: "Server is healthy",
-    data: { uptime: process.uptime() },
-  });
-});
+router.use("/health", healthRouter);
 
 module.exports = router;

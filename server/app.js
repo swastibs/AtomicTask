@@ -5,7 +5,7 @@ const logger = require("morgan");
 
 const apiRouter = require("./src/routes/index.route");
 const connectDB = require("./src/config/db");
-const errorHandler = require("./src/middleware/errorHandler");
+const errorHandler = require("./src/middleware/errorHandler.middleware");
 
 const app = express();
 
