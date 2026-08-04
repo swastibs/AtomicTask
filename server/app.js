@@ -10,4 +10,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: 200,
+    message: "Server is running",
+  });
+});
+
 module.exports = app;
