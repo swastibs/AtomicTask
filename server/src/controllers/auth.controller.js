@@ -6,6 +6,7 @@ const ApiError = require("../utils/ApiError");
 const { ApiResponse } = require("../utils/ApiResponse");
 const catchAsync = require("../utils/catchAsync");
 const { sanitizeUser } = require("../utils/sanitize");
+const { blacklistToken } = require("../utils/tokenBlacklist");
 
 exports.signUp = catchAsync(async (req, res) => {
   const { name, email, password } = req.body;
@@ -45,4 +46,22 @@ exports.login = catchAsync(async (req, res) => {
     { user: sanitizeUser(user), token },
     "Login successful",
   );
+});
+
+exports.logout = catchAsync(async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    throw new ApiError(401, "No token provided");
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  const decoded = jwt.decode(token);
+  if (!decoded || !decoded.exp) {
+    throw new ApiError(400, "Invalid token format");
+  }
+
+  await blacklistToken(token, decoded.exp);
+
+  return ApiResponse.ok(res, null, "Logged out successfully");
 });
