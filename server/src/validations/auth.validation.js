@@ -27,4 +27,21 @@ const signUpValidation = {
   query: Joi.object({}).max(0),
 };
 
-module.exports = { signUpValidation };
+const loginValidation = {
+  body: Joi.object({
+    email: Joi.string().email().required().messages({
+      "string.empty": "Email is required",
+      "string.email": "Please enter a valid email address",
+      "any.required": "Email is required",
+    }),
+    password: Joi.string().required().messages({
+      "string.empty": "Password is required",
+      "any.required": "Password is required",
+    }),
+  }).options({ abortEarly: false }),
+
+  params: Joi.object({}).max(0),
+  query: Joi.object({}).max(0),
+};
+
+module.exports = { signUpValidation, loginValidation };

@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const chalk = require("chalk");
-require("dotenv").config();
-const MONGODB_URI = process.env.MONGODB_URI;
+const env = require("../config/env.config");
+
+const MONGODB_URI = env.MONGODB_URI;
 
 const connectDB = async () => {
   try {
