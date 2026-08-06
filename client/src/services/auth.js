@@ -9,6 +9,7 @@ const authService = {
     return api.post("/auth/login", { email, password });
   },
 
+  // ✅ CORRECT endpoint
   getMe: () => {
     return api.get("/users/me");
   },
