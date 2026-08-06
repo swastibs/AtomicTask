@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const helmet = require("helmet");
+const cors = require("cors");
 
 const apiRouter = require("./src/routes/index.route");
 const connectDB = require("./src/config/db");
@@ -8,6 +9,9 @@ const errorHandler = require("./src/middlewares/errorHandler");
 const passportConfig = require("./src/config/passport");
 
 const app = express();
+
+app.use(cors());
+
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

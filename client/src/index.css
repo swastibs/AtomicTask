@@ -463,6 +463,14 @@
   animation: float 8s ease-in-out infinite;
 }
 
+.shape-triangle {
+  width: 0;
+  height: 0;
+  border-left: 0.75rem solid transparent;
+  border-right: 0.75rem solid transparent;
+  border-bottom: 1.35rem solid currentColor;
+}
+
 @keyframes marquee-up {
   0% {
     transform: translateY(0);

@@ -1,4 +1,53 @@
-import { Rocket } from "lucide-react";
+import { memo } from "react";
+import { X } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXTwitter, faInstagram, faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
+import { RocketIcon, SocialIcon } from "@/components/shared";
+
+const FOOTER_GROUPS = [
+  {
+    title: "Product",
+    links: [
+      { label: "Features", href: "#features" },
+      { label: "Changelog", href: "#" },
+      { label: "Roadmap", href: "#" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "#" },
+      { label: "Blog", href: "#" },
+      { label: "Careers", href: "#" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy", href: "#" },
+      { label: "Terms", href: "#" },
+      { label: "Security", href: "#" },
+    ],
+  },
+];
+
+const SOCIAL_LINKS = [
+  {
+    label: "X (Twitter)",
+    href: "#",
+    icon: <FontAwesomeIcon icon={faXTwitter} className="size-3.5" />,
+  },
+  {
+    label: "Instagram",
+    href: "#",
+    icon: <FontAwesomeIcon icon={faInstagram} className="size-3.5" />,
+  },
+  {
+    label: "LinkedIn",
+    href: "#",
+    icon: <FontAwesomeIcon icon={faLinkedinIn} className="size-3.5" />,
+  },
+];
 
 export function Footer() {
   return (
@@ -8,9 +57,9 @@ export function Footer() {
           <div className="col-span-2 sm:col-span-1">
             <a
               href="/"
-              className="flex items-center gap-2 mb-4 hover:opacity-70 transition-opacity no-underline"
+              className="group flex items-center gap-2 mb-4 hover:opacity-70 transition-opacity no-underline"
             >
-              <Rocket className="h-7 w-7 text-primary" />
+              <RocketIcon className="h-7 w-7" />
               <span className="font-semibold text-base tracking-tight text-foreground">
                 AtomicTask
               </span>
@@ -20,157 +69,37 @@ export function Footer() {
               accountability.
             </p>
           </div>
-          {/* ... rest same as before ... */}
-          {/* Keep the same columns as previous version */}
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground/60 mb-4">
-              Product
-            </p>
-            <ul className="space-y-2.5">
-              <li>
-                <a
-                  href="#features"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Features
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Changelog
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Roadmap
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground/60 mb-4">
-              Company
-            </p>
-            <ul className="space-y-2.5">
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Careers
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground/60 mb-4">
-              Legal
-            </p>
-            <ul className="space-y-2.5">
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Privacy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Terms
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Security
-                </a>
-              </li>
-            </ul>
-          </div>
+
+          {FOOTER_GROUPS.map((group) => (
+            <div key={group.title}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground/60 mb-4">
+                {group.title}
+              </p>
+              <ul className="space-y-2.5">
+                {group.links.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground/60 mb-4">
               Socials
             </p>
             <ul className="space-y-3">
-              <li>
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  <span className="size-6 rounded-lg bg-muted border border-border flex items-center justify-center group-hover:bg-muted/80 transition-colors">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="size-3.5"
-                      fill="currentColor"
-                    >
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631z" />
-                    </svg>
-                  </span>
-                  X (Twitter)
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  <span className="size-6 rounded-lg bg-muted border border-border flex items-center justify-center group-hover:bg-muted/80 transition-colors">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="size-3.5"
-                      fill="currentColor"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                    </svg>
-                  </span>
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  <span className="size-6 rounded-lg bg-muted border border-border flex items-center justify-center group-hover:bg-muted/80 transition-colors">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="size-3.5"
-                      fill="currentColor"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                    </svg>
-                  </span>
-                  LinkedIn
-                </a>
-              </li>
+              {SOCIAL_LINKS.map((item) => (
+                <li key={item.label}>
+                  <SocialIcon {...item} />
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -186,4 +115,5 @@ export function Footer() {
     </footer>
   );
 }
-export default Footer;
+
+export default memo(Footer);
