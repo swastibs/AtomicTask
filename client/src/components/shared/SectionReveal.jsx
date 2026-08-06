@@ -1,31 +1,33 @@
 import { memo } from "react";
-import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { cn } from "@/lib/utils";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
-export function SectionReveal({
-  as: Component = "section",
-  id,
-  className = "",
+export const SectionReveal = memo(function SectionReveal({
   children,
-  rootMargin = "0px 0px -120px 0px",
+  className,
+  as: Component = "section",
   ...props
 }) {
-  const [ref, isVisible] = useIntersectionObserver({ rootMargin });
+  const [sectionRef, isVisible] = useIntersectionObserver();
 
   return (
     <Component
-      id={id}
-      ref={ref}
-      className={cn(
-        "section-reveal transition-all duration-300 ease-out",
-        isVisible ? "is-visible translate-y-0 opacity-100" : "translate-y-4 opacity-0",
-        className,
-      )}
+      ref={sectionRef}
+      className={cn("relative isolate overflow-hidden", className)}
       {...props}
     >
-      {children}
+      <div
+        className={cn(
+          "section-reveal relative mx-auto max-w-7xl transition-all duration-300 ease-out",
+          isVisible
+            ? "is-visible translate-y-0 opacity-100"
+            : "translate-y-4 opacity-0",
+        )}
+      >
+        {children}
+      </div>
     </Component>
   );
-}
+});
 
-export default memo(SectionReveal);
+export default SectionReveal;

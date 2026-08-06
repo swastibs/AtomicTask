@@ -6,11 +6,24 @@ import Footer from "./components/layout/Footer";
 import PrivateRoute from "./components/shared/PrivateRoute";
 import PublicRoute from "./components/shared/PublicRoute";
 import Landing from "./pages/Landing/Landing";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import { useEffect } from "react";
 
 function App() {
+  // Re‑trigger animations after mount
+  useEffect(() => {
+    const els = document.querySelectorAll(
+      ".hero-line, .animate-in, .section-reveal, .animate-float, .animate-slow-drift, .animate-shimmer, .animate-caret, .animate-marquee-up, .animate-marquee-down",
+    );
+    els.forEach((el) => {
+      el.style.animation = "none";
+      requestAnimationFrame(() => {
+        el.style.animation = "";
+      });
+    });
+  }, []);
+
   return (
     <ThemeProvider>
       <AuthProvider>
@@ -23,15 +36,12 @@ function App() {
             <Navbar />
             <main className="relative z-10 flex-1">
               <Routes>
-                {/* Public Routes - Accessible to everyone */}
                 <Route path="/" element={<Landing />} />
-
-                {/* Auth Routes - Redirect to dashboard if already logged in */}
                 <Route
                   path="/login"
                   element={
                     <PublicRoute>
-                      <Login />
+                      <Auth />
                     </PublicRoute>
                   }
                 />
@@ -39,12 +49,10 @@ function App() {
                   path="/signup"
                   element={
                     <PublicRoute>
-                      <Signup />
+                      <Auth />
                     </PublicRoute>
                   }
                 />
-
-                {/* Protected Routes - Require authentication */}
                 <Route
                   path="/dashboard"
                   element={

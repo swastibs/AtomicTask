@@ -77,9 +77,16 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      // If the API fails (network, 401, etc.), we still want to log out locally
+      console.error("Logout API error:", error);
+    } finally {
+      localStorage.removeItem("token");
+      setUser(null);
+    }
   };
 
   const value = {

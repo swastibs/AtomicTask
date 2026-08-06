@@ -39,9 +39,7 @@ const authService = {
    * Server-side logout can be added if your API supports it
    */
   logout: () => {
-    // If your API has a logout endpoint, call it here
-    // return api.post("/auth/logout");
-    // For now, this is handled by the context
+    return api.post("/auth/logout");
   },
 };
 

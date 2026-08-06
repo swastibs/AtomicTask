@@ -567,3 +567,244 @@
     animation: none !important;
   }
 }
+
+/* ===== Animations ===== */
+.hero-line {
+  animation: heroIn 0.7s ease-out both !important;
+}
+.animate-in {
+  animation: animate-in 0.6s ease-out both !important;
+}
+.fade-in {
+  animation: fade-in 0.4s ease-out both !important;
+}
+.slide-in-from-top-1,
+.slide-in-from-top-2,
+.slide-in-from-top-3 {
+  animation: slide-in-from-top 0.5s ease-out both !important;
+}
+.slide-in-from-bottom-1,
+.slide-in-from-bottom-2 {
+  animation: slide-in-from-bottom 0.35s ease-out both !important;
+}
+.zoom-in-95 {
+  animation: zoom-in-95 0.3s ease-out both !important;
+}
+.section-reveal.is-visible {
+  animation: section-reveal 0.45s ease-out both !important;
+}
+.animate-shimmer {
+  animation: shimmer 2.2s ease-in-out infinite !important;
+}
+.animate-caret {
+  animation: caret 1s step-end infinite !important;
+}
+.animate-float {
+  animation: float 8s ease-in-out infinite !important;
+}
+.animate-slow-drift {
+  animation: slow-drift 12s ease-in-out infinite !important;
+}
+.animate-marquee-up {
+  animation: marquee-up 40s linear infinite !important;
+}
+.animate-marquee-down {
+  animation: marquee-down 40s linear infinite !important;
+}
+
+/* ===== Animations ===== */
+.hero-line {
+  animation: heroIn 0.7s ease-out both !important;
+}
+.hero-d0 {
+  animation-delay: 0ms !important;
+}
+.hero-d1 {
+  animation-delay: 80ms !important;
+}
+.hero-d2 {
+  animation-delay: 160ms !important;
+}
+.hero-d3 {
+  animation-delay: 240ms !important;
+}
+.hero-d4 {
+  animation-delay: 320ms !important;
+}
+.hero-d5 {
+  animation-delay: 400ms !important;
+}
+.hero-d6 {
+  animation-delay: 500ms !important;
+}
+
+@keyframes heroIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: animate-in 0.6s ease-out both !important;
+}
+@keyframes animate-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.4s ease-out both !important;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-in-from-top-1,
+.slide-in-from-top-2,
+.slide-in-from-top-3 {
+  animation: slide-in-from-top 0.5s ease-out both !important;
+}
+.slide-in-from-bottom-1,
+.slide-in-from-bottom-2 {
+  animation: slide-in-from-bottom 0.35s ease-out both !important;
+}
+@keyframes slide-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slide-in-from-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.zoom-in-95 {
+  animation: zoom-in-95 0.3s ease-out both !important;
+}
+@keyframes zoom-in-95 {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.section-reveal.is-visible {
+  animation: section-reveal 0.45s ease-out both !important;
+}
+@keyframes section-reveal {
+  from {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2.2s ease-in-out infinite !important;
+}
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+.animate-caret {
+  animation: caret 1s step-end infinite !important;
+}
+@keyframes caret {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite !important;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.animate-slow-drift {
+  animation: slow-drift 12s ease-in-out infinite !important;
+}
+@keyframes slow-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(12px, -16px, 0) scale(1.04);
+  }
+}
+
+.animate-marquee-up {
+  animation: marquee-up 40s linear infinite !important;
+}
+.animate-marquee-down {
+  animation: marquee-down 40s linear infinite !important;
+}
+@keyframes marquee-up {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(calc(-50% - 0.5rem));
+  }
+}
+@keyframes marquee-down {
+  0% {
+    transform: translateY(calc(-50% - 0.5rem));
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* drift keyframes (used in DriftBlobs) are already defined elsewhere */
