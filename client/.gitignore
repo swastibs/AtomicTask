@@ -7,13 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-a.cjs
-allcode.txt
-
 node_modules
 dist
 dist-ssr
 *.local
+
+.env
+
+a.cjs
+allcode.txt
 
 # Editor directories and files
 .vscode/*
