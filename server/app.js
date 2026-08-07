@@ -10,16 +10,17 @@ const env = require("./src/config/env.config");
 
 const app = express();
 
+const normalizeOrigin = (origin) => origin.trim().replace(/\/+$/, "");
 const allowedOrigins = (env.CORS_ALLOWED_ORIGINS || "http://localhost:5173,http://localhost:3000")
   .split(",")
-  .map((origin) => origin.trim())
+  .map(normalizeOrigin)
   .filter(Boolean);
 
 const corsOptions = {
   origin(origin, callback) {
     // Non-browser requests do not carry Origin. Browser requests must be allowlisted.
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error("Origin not allowed by CORS"));
+    if (!origin || allowedOrigins.includes(normalizeOrigin(origin))) return callback(null, true);
+    return callback(null, false);
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
