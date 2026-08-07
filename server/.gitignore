@@ -17,6 +17,8 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 a.js
 allcode.txt
 
+.env.example
+
 # Runtime data
 pids
 *.pid
@@ -85,6 +87,7 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+production.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

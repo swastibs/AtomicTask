@@ -24,8 +24,11 @@ const createRedisClient = () => {
   redisClient = new Redis({
     host: env.REDIS_HOST,
     port: env.REDIS_PORT || 6379,
+    username: env.REDIS_USERNAME,
     password: env.REDIS_PASSWORD || undefined,
     db: env.REDIS_DB || 0,
+    // Upstash TCP endpoints require TLS. Do not set rejectUnauthorized: false.
+    tls: env.REDIS_TLS ? {} : undefined,
     retryStrategy: (times) => Math.min(times * 100, 10000),
   });
 

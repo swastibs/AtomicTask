@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: process.env.ENV_FILE || ".env" });
 
 const requiredEnv = ["MONGODB_URI", "JWT_SECRET"];
 const missingEnv = requiredEnv.filter((name) => !process.env[name]);
@@ -19,8 +19,10 @@ const env = {
   BCRYPT_ROUNDS: Number(process.env.BCRYPT_ROUNDS || 12),
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT,
+  REDIS_USERNAME: process.env.REDIS_USERNAME || "default",
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
   REDIS_DB: process.env.REDIS_DB || 0,
+  REDIS_TLS: process.env.REDIS_TLS === "true",
   CORS_ALLOWED_ORIGINS: process.env.CORS_ALLOWED_ORIGINS,
   COOKIE_SAME_SITE: process.env.COOKIE_SAME_SITE || "lax",
 };
