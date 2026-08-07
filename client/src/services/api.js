@@ -2,9 +2,11 @@ import axios from "axios";
 
 // Get the API URL from environment variables
 // Vite uses import.meta.env, Create React App uses process.env
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? "/api" : "http://localhost:3000/api");
+// Production is deployed on Vercel, which proxies /api to the backend. Keeping
+// this relative prevents refresh cookies from becoming third-party cookies.
+const API_URL = import.meta.env.PROD
+  ? "/api"
+  : import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 // Create axios instance with base configuration
 const api = axios.create({
