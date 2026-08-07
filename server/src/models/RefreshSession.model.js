@@ -10,7 +10,7 @@ const RefreshSessionSchema = new mongoose.Schema(
     },
     refreshTokenHash: { type: String, required: true, unique: true },
     familyId: { type: String, required: true, index: true },
-    expiresAt: { type: Date, required: true, index: true },
+    expiresAt: { type: Date, required: true },
     revokedAt: { type: Date, default: null },
     replacedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
     userAgent: { type: String, maxlength: 512, default: null },
