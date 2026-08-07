@@ -51,7 +51,7 @@ export function Dashboard() {
   }
 
   return (
-    <div className="relative isolate min-h-[80vh] overflow-hidden px-4 py-12">
+    <div className="relative isolate min-h-[80vh] overflow-hidden px-4 py-12 mt-12">
       <DriftBlobs className="absolute inset-0 -z-10 opacity-70" />
       <div className="pointer-events-none absolute left-8 top-16 h-24 w-24 rounded-full bg-primary/10 blur-3xl opacity-30 animate-[drift-2_34s_ease-in-out_infinite]" />
       <div className="pointer-events-none absolute right-8 bottom-20 h-28 w-28 rounded-full bg-foreground/5 blur-3xl opacity-40 animate-[drift-3_32s_ease-in-out_infinite]" />
