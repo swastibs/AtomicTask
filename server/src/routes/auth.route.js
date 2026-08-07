@@ -9,6 +9,18 @@ const {
 const auth = require("../middlewares/auth");
 const requireTrustedOrigin = require("../middlewares/requireTrustedOrigin");
 
+// Authentication responses may set or rotate a session cookie. They must never
+// be stored by a browser, CDN, or external-origin rewrite cache.
+router.use((req, res, next) => {
+  res.set({
+    "Cache-Control": "no-store, private",
+    "CDN-Cache-Control": "no-store",
+    Pragma: "no-cache",
+  });
+  res.vary("Cookie");
+  next();
+});
+
 router.post("/signup", requireTrustedOrigin, validate(signUpValidation), signUp);
 router.post("/login", requireTrustedOrigin, validate(loginValidation), login);
 router.post("/refresh", requireTrustedOrigin, refresh);
