@@ -1,4 +1,4 @@
-import api from "./api";
+import api, { refreshAccessToken } from "./api";
 
 const authService = {
   signup: (name, email, password) => {
@@ -8,6 +8,8 @@ const authService = {
   login: (email, password) => {
     return api.post("/auth/login", { email, password });
   },
+
+  refresh: refreshAccessToken,
 
   // ✅ CORRECT endpoint
   getMe: () => {

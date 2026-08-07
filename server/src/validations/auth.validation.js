@@ -15,10 +15,10 @@ const signUpValidation = {
       "any.required": "Email is required",
     }),
 
-    password: Joi.string().required().min(4).max(16).messages({
+    password: Joi.string().required().min(12).max(128).messages({
       "string.empty": "Password is required",
-      "string.min": "Password must be at least 4 characters",
-      "string.max": "Password cannot exceed 16 characters",
+      "string.min": "Password must be at least 12 characters",
+      "string.max": "Password cannot exceed 128 characters",
       "any.required": "Password is required",
     }),
   }).options({ abortEarly: false }),

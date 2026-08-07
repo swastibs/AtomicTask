@@ -1,25 +1,51 @@
 const express = require("express");
-const passport = require("passport");
 const helmet = require("helmet");
 const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 
 const apiRouter = require("./src/routes/index.route");
 const connectDB = require("./src/config/db");
 const errorHandler = require("./src/middlewares/errorHandler");
-const passportConfig = require("./src/config/passport");
+const env = require("./src/config/env.config");
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = (env.CORS_ALLOWED_ORIGINS || "http://localhost:5173,http://localhost:3000")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
-app.use(helmet());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const corsOptions = {
+  origin(origin, callback) {
+    // Non-browser requests do not carry Origin. Browser requests must be allowlisted.
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("Origin not allowed by CORS"));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+};
+
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
+
+app.set("trust proxy", env.TRUST_PROXY);
+app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }));
+app.use(express.json({ limit: "100kb" }));
+app.use(express.urlencoded({ extended: false, limit: "100kb" }));
+
+app.use(
+  "/api/auth",
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 20,
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+    message: { success: false, message: "Too many authentication attempts. Try again later." },
+  }),
+);
 
 connectDB();
-
-passportConfig(passport);
-app.use(passport.initialize());
 
 app.use("/api", apiRouter);
 app.use(errorHandler);

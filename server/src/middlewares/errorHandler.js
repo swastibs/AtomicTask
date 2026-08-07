@@ -59,9 +59,8 @@ const errorHandler = (err, req, res, next) => {
   // --- MongoDB duplicate key ---
   else if (err.code === 11000) {
     statusCode = 409;
-    const field = Object.keys(err.keyPattern)[0];
-    message = `Duplicate value for field: ${field}`;
-    errors = [{ field, message: `${field} already exists` }];
+    message = "A record with those details already exists";
+    errors = null;
   }
 
   // --- CastError (invalid ObjectId) ---
@@ -80,8 +79,11 @@ const errorHandler = (err, req, res, next) => {
     message = "Token expired";
   }
 
-  // Log error for debugging
-  console.error("Error:", err);
+  // Expected client/auth failures (4xx) are not server errors and should not
+  // create noisy stack traces during normal signed-out session checks.
+  if (statusCode >= 500) {
+    console.error("Unhandled server error:", err);
+  }
 
   return errorResponse(res, statusCode, message, errors);
 };

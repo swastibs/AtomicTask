@@ -7,7 +7,7 @@ export const signupSchema = z.object({
     .email("Please enter a valid email address")
     .toLowerCase()
     .trim(),
-  password: z.string().min(4, "Password must be at least 4 characters"),
+  password: z.string().min(12, "Password must be at least 12 characters"),
 });
 
 export const loginSchema = z.object({

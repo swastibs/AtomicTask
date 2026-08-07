@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Get the API URL from environment variables
 // Vite uses import.meta.env, Create React App uses process.env
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 // Create axios instance with base configuration
 const api = axios.create({
@@ -11,17 +11,31 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
   timeout: 10000, // 10 seconds timeout
+  withCredentials: true,
 });
+
+let refreshPromise = null;
+
+// React Strict Mode and concurrent failed requests can both ask for a refresh.
+// Share one rotation so the same refresh cookie is never consumed twice.
+export async function refreshAccessToken() {
+  refreshPromise ??= api.post("/auth/refresh");
+  try {
+    return await refreshPromise;
+  } finally {
+    refreshPromise = null;
+  }
+}
 
 /**
  * Request Interceptor
- * Automatically attaches the JWT token to every request if it exists
+ * Attaches the short-lived access token held only in memory.
  */
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const authorization = api.defaults.headers.common.Authorization;
+    if (authorization) {
+      config.headers.Authorization = authorization;
     }
     return config;
   },
@@ -39,19 +53,28 @@ api.interceptors.response.use(
     // Any status code within 2xx triggers this
     return response;
   },
-  (error) => {
-    // Any status code outside 2xx triggers this
+  async (error) => {
+    const originalRequest = error.config;
 
-    // Handle 401 Unauthorized (token expired or invalid)
-    if (error.response?.status === 401) {
-      // Clear the invalid token
-      localStorage.removeItem("token");
-
-      // Optional: Redirect to login page
-      // window.location.href = "/login";
-
-      // You can also dispatch a custom event or update context here
-      // window.dispatchEvent(new CustomEvent("auth:logout"));
+    // Refresh once and replay an API request whose access token has expired.
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry &&
+      !/\/auth\/(login|signup|refresh)/.test(originalRequest.url || "")
+    ) {
+      originalRequest._retry = true;
+      try {
+        const response = await refreshAccessToken();
+        const accessToken = response.data.data.accessToken;
+        api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return api(originalRequest);
+      } catch (refreshError) {
+        delete api.defaults.headers.common.Authorization;
+        window.dispatchEvent(new CustomEvent("auth:expired"));
+        return Promise.reject(refreshError);
+      }
     }
 
     // Handle 403 Forbidden (insufficient permissions)

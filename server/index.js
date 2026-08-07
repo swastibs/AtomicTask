@@ -3,8 +3,9 @@ const chalk = require("chalk");
 const mongoose = require("mongoose");
 const app = require("./app");
 const env = require("./src/config/env.config");
+const { initRedis } = require("./src/config/redis");
 
-const PORT = env.PORT || 8080;
+const PORT = env.port || process.env.PORT || 8080;
 
 const server = http.createServer(app);
 
@@ -40,19 +41,36 @@ const gracefulShutdown = async (signal) => {
   }, 10000);
 };
 
-server.listen(PORT, () => {
-  console.log(
-    chalk.green("Server is running on "),
-    chalk.yellow(`http://localhost:${PORT}`),
-  );
-  console.log(
-    chalk.hex("#f8a115")(`
+const startServer = () => {
+  server.listen(PORT, () => {
+    console.log(
+      chalk.green("Server is running on "),
+      chalk.yellow(`http://localhost:${PORT}`),
+    );
+    console.log(
+      chalk.hex("#f8a115")(`
 ▄▖▗      ▘  ▄▖    ▌ 
 ▌▌▜▘▛▌▛▛▌▌▛▘▐ ▀▌▛▘▙▘
 ▛▌▐▖▙▌▌▌▌▌▙▖▐ █▌▄▌▛▖
   `),
-  );
-});
+    );
+  });
 
-process.on("SIGINT", () => gracefulShutdown("SIGINT"));
-process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+  process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+  process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+};
+
+const start = async () => {
+  try {
+    await initRedis();
+  } catch (error) {
+    console.error(chalk.red("Redis failed to start:"), error);
+  }
+
+  startServer();
+};
+
+start().catch((err) => {
+  console.error(chalk.red("Startup failed:"), err);
+  process.exit(1);
+});

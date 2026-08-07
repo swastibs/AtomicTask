@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const env = require("../config/env.config");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -24,7 +25,8 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlength: [4, "Password must be at least 4 characters long"],
+      minlength: [12, "Password must be at least 12 characters long"],
+      maxlength: [128, "Password cannot exceed 128 characters"],
       select: false,
     },
 
@@ -60,7 +62,7 @@ UserSchema.index({ isDeleted: 1 });
 
 UserSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
-  this.password = await bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, env.BCRYPT_ROUNDS);
 });
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {

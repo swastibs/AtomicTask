@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import authService from "../services/auth";
+import api from "../services/api";
 
 export const AuthContext = createContext();
 
@@ -31,17 +32,13 @@ export function AuthProvider({ children }) {
   };
 
   const checkAuth = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
     try {
-      const response = await authService.getMe();
-      const fetchedUser = response.data?.user ?? response.data;
-      setUser(fetchedUser);
-    } catch (error) {
-      localStorage.removeItem("token");
+      const response = await authService.refresh();
+      const { accessToken, user } = response.data.data;
+      api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      setUser(user);
+    } catch {
+      delete api.defaults.headers.common.Authorization;
       setUser(null);
     } finally {
       setLoading(false);
@@ -52,11 +49,20 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      delete api.defaults.headers.common.Authorization;
+      setUser(null);
+    };
+    window.addEventListener("auth:expired", handleSessionExpired);
+    return () => window.removeEventListener("auth:expired", handleSessionExpired);
+  }, []);
+
   const signup = async (name, email, password) => {
     try {
       const response = await authService.signup(name, email, password);
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
+      const { accessToken, user } = response.data.data;
+      api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
       setUser(user);
       return { success: true, user };
     } catch (error) {
@@ -68,8 +74,8 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       const response = await authService.login(email, password);
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
+      const { accessToken, user } = response.data.data;
+      api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
       setUser(user);
       return { success: true, user };
     } catch (error) {
@@ -85,7 +91,7 @@ export function AuthProvider({ children }) {
       // If the API fails (network, 401, etc.), we still want to log out locally
       console.error("Logout API error:", error);
     } finally {
-      localStorage.removeItem("token");
+      delete api.defaults.headers.common.Authorization;
       setUser(null);
     }
   };
