@@ -38,7 +38,8 @@ export function AuthProvider({ children }) {
     }
     try {
       const response = await authService.getMe();
-      setUser(response.data.user);
+      const fetchedUser = response.data?.user ?? response.data;
+      setUser(fetchedUser);
     } catch (error) {
       localStorage.removeItem("token");
       setUser(null);
